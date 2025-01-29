@@ -1,0 +1,64 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "API Documentation",
+    "version" : "1.0"
+  },
+  "paths" : {
+    "/clientes/salvar" : {
+      "post" : {
+        "summary" : "cadastrarCliente",
+        "description" : "cadastrarCliente",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "cpf", "email", "nome" ],
+                "type" : "object",
+                "properties" : {
+                  "id" : {
+                    "type" : "integer",
+                    "description" : "",
+                    "format" : "int64"
+                  },
+                  "nome" : {
+                    "maxLength" : 50,
+                    "minLength" : 3,
+                    "type" : "string",
+                    "description" : ""
+                  },
+                  "cpf" : {
+                    "maxLength" : 11,
+                    "minLength" : 11,
+                    "type" : "string",
+                    "description" : ""
+                  },
+                  "email" : {
+                    "type" : "string",
+                    "description" : "",
+                    "format" : "email"
+                  }
+                },
+                "description" : ""
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : { }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : { }
+}
