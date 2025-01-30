@@ -44,4 +44,9 @@ public class ClienteController {
         clienteService.excluirCliente(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+    @GetMapping("/buscar/cpf/{cpf}")
+    public ResponseEntity<Cliente> buscarPorCpf(@PathVariable String cpf) {
+        Cliente cliente = clienteService.buscarPorCpf(cpf);
+        return ResponseEntity.status(HttpStatus.OK).body(cliente);
+    }
 }
