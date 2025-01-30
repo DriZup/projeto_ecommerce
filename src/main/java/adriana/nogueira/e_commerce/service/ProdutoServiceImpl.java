@@ -42,11 +42,11 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     @Override
     public Iterable<Produto> buscarProdutosPorNome(String nome) {
-        if (produtoRepository.existsByNome(nome)) {
-            return produtoRepository.findByNomeContainingIgnoreCase(nome);
-        } else {
-            throw new IllegalArgumentException("Produto com o nome " + nome + " nao encontrado!");
+        Iterable<Produto> produtos = produtoRepository.findByNomeContainingIgnoreCase(nome);
+        if (!produtos.iterator().hasNext()) {
+            throw new IllegalArgumentException("Nenhum produto com o nome '" + nome + "' foi encontrado!");
         }
+        return produtos;
     }
 
 }
