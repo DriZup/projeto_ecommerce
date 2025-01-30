@@ -14,23 +14,48 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public Cliente salvarCliente(Cliente cliente) {
-        if (clienteRepository.existsByCpf(cliente.getCpf())) {
-            throw new IllegalArgumentException("Já existe um cliente cadastrado com esse CPF.");
-        }
-
-        if (clienteRepository.existsByEmail(cliente.getEmail())) {
-            throw new IllegalArgumentException("Já existe um cliente cadastrado com esse email.");
-        }
-        clienteRepository.save(cliente);
-
-        return cliente;
+        validarCpfEEmail(cliente);
+        return clienteRepository.save(cliente);
     }
 
     @Override
     public void atualizarCliente(Cliente cliente) {
         if (!clienteRepository.existsById(cliente.getId())) {
-            throw new IllegalArgumentException("Não existe um cliente cadastrado com esse ID.");
+            throw new IllegalArgumentException("Não existe um cliente cadastrado com esse ID.");
         }
+        validarCpfEEmail(cliente);
+        clienteRepository.save(cliente);
+    }
+
+    @Override
+    public void excluirCliente(Long id) {
+        if (!clienteRepository.existsById(id)) {
+            throw new IllegalArgumentException("Não existe um cliente cadastrado com esse ID.");
+        }
+        clienteRepository.deleteById(id);
+    }
+
+    @Override
+    public Cliente buscarPorId(Long id) {
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Não existe um cliente cadastrado com esse ID."));
+    }
+
+    @Override
+    public Cliente buscarPorCpf(String cpf) {
+        Cliente cliente = clienteRepository.findByCpf(cpf);
+        if (cliente == null) {
+            throw new IllegalArgumentException("Não existe um cliente cadastrado com esse CPF.");
+        }
+        return cliente;
+    }
+
+    @Override
+    public Iterable<Cliente> buscarTodos() {
+        return clienteRepository.findAll();
+    }
+
+    private void validarCpfEEmail(Cliente cliente) {
         Cliente clienteExistentePorCpf = clienteRepository.findByCpf(cliente.getCpf());
         if (clienteExistentePorCpf != null && !clienteExistentePorCpf.getId().equals(cliente.getId())) {
             throw new IllegalArgumentException("Já existe outro cliente cadastrado com esse CPF.");
@@ -38,29 +63,7 @@ public class ClienteServiceImpl implements ClienteService {
 
         Cliente clienteExistentePorEmail = clienteRepository.findByEmail(cliente.getEmail());
         if (clienteExistentePorEmail != null && !clienteExistentePorEmail.getId().equals(cliente.getId())) {
-            throw new IllegalArgumentException("Já existe outro cliente cadastrado com esse email.");
+            throw new IllegalArgumentException("Já existe outro cliente cadastrado com esse e-mail.");
         }
-
-        clienteRepository.save(cliente);
-    }
-
-
-    @Override
-    public void excluirCliente(Long id) {
-        if (!clienteRepository.existsById(id)) {
-            throw new IllegalArgumentException("Não existe um cliente cadastrado com esse ID.");
-        }
-
-        clienteRepository.deleteById(id);
-    }
-
-    @Override
-    public Cliente buscarPorId(Long id) {
-        return clienteRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Não existe um cliente cadastrado com esse ID."));
-    }
-
-    public Iterable<Cliente> buscarTodos() {
-        return clienteRepository.findAll();
     }
 }
