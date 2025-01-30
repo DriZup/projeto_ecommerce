@@ -12,5 +12,8 @@ public interface ClienteService {
 
     Cliente buscarPorId(Long id);
 
+    Cliente buscarPorCpf(String cpf);
 
+
+    Iterable<Cliente> buscarTodos();
 }
