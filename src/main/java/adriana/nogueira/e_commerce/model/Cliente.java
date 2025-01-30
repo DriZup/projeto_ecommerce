@@ -10,16 +10,17 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "O nome é obrigatório.")
+    @NotNull(message = "O campo nome não pode ser nulo!")
     @Size(min = 3, max = 50, message = "O nome deve ter entre 3 e 50 caracteres.")
     private String nome;
 
-    @NotBlank(message = "O CPF é obrigatório.")
+    @NotNull(message = "O CPF é obrigatório.")
+    @NotBlank(message = "O CPF nao pode estar em branco.")
     @Size(min = 11, max = 11, message = "O CPF deve ter 11 caracteres.")
     @Column(unique = true)
     private String cpf;
 
-    @NotBlank(message = "O e-mail é obrigatório.")
+    @NotNull(message = "O e-mail é obrigatório.")
     @Email(message = "O e-mail deve ser válido.")
     @Column(unique = true)
     private String email;
@@ -56,4 +57,5 @@ public class Cliente {
     public void setEmail(String email) {
         this.email = email;
     }
+
 }
