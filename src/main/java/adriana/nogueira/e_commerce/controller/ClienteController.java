@@ -16,7 +16,7 @@ public class ClienteController {
     private ClienteServiceImpl clienteService;
 
     @PostMapping("/salvar")
-    public ResponseEntity<Cliente> cadastrarCliente(@Valid @RequestBody Cliente cliente) {
+    public ResponseEntity<Cliente> cadastrarCliente(@RequestBody Cliente cliente) {
        Cliente salvarCliente = clienteService.salvarCliente(cliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvarCliente);
     }
