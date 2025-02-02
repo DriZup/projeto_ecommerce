@@ -16,13 +16,13 @@ public class ProdutoController {
     private ProdutoServiceImpl produtoService;
 
     @PostMapping("/salvar")
-    public ResponseEntity<Produto> salvarProduto(@Valid @RequestBody Produto produto) {
+    public ResponseEntity<Produto> salvarProduto(@RequestBody Produto produto) {
         Produto salvarProduto = produtoService.salvarProduto(produto);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvarProduto);
     }
 
     @PutMapping("/atualizar")
-    public ResponseEntity<Produto> atualizarProduto( @Valid @RequestBody Produto produto) {
+    public ResponseEntity<Produto> atualizarProduto(@RequestBody Produto produto) {
         Produto atualizarProduto = produtoService.atualizarProduto(produto);
         return ResponseEntity.status(HttpStatus.OK).body(atualizarProduto);
     }
