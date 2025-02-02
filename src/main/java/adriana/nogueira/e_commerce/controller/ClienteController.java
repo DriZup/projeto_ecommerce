@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
@@ -45,8 +47,8 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
     @GetMapping("/buscar/cpf/{cpf}")
-    public ResponseEntity<Cliente> buscarPorCpf(@PathVariable String cpf) {
-        Cliente cliente = clienteService.buscarPorCpf(cpf);
+    public ResponseEntity<Optional<Cliente>> buscarPorCpf(@PathVariable String cpf) {
+        Optional<Cliente> cliente = clienteService.buscarPorCpf(cpf);
         return ResponseEntity.status(HttpStatus.OK).body(cliente);
     }
 }

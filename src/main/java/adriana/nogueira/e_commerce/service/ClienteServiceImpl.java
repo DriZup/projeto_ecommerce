@@ -5,6 +5,8 @@ import adriana.nogueira.e_commerce.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ClienteServiceImpl implements ClienteService {
 
@@ -43,8 +45,8 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Cliente buscarPorCpf(String cpf) {
-        Cliente cliente = clienteRepository.findByCpf(cpf);
+    public Optional<Cliente> buscarPorCpf(String cpf) {
+        Optional<Cliente> cliente = clienteRepository.findByCpf(cpf);
         if (cliente == null) {
             throw new IllegalArgumentException("Não existe um cliente cadastrado com esse CPF.");
         }
@@ -57,8 +59,8 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     private void validarCpfEEmail(Cliente cliente) {
-        Cliente clienteExistentePorCpf = clienteRepository.findByCpf(cliente.getCpf());
-        if (clienteExistentePorCpf != null && !clienteExistentePorCpf.getId().equals(cliente.getId())) {
+        Optional<Cliente> clienteExistentePorCpf = clienteRepository.findByCpf(cliente.getCpf());
+        if (clienteExistentePorCpf.isPresent() && !clienteExistentePorCpf.get().getId().equals(cliente.getId())) {
             throw new IllegalArgumentException("Já existe outro cliente cadastrado com esse CPF.");
         }
 

@@ -2,6 +2,8 @@ package adriana.nogueira.e_commerce.service;
 
 import adriana.nogueira.e_commerce.model.Cliente;
 
+import java.util.Optional;
+
 public interface ClienteService {
 
     Cliente salvarCliente(Cliente cliente);
@@ -12,7 +14,7 @@ public interface ClienteService {
 
     Cliente buscarPorId(Long id);
 
-    Cliente buscarPorCpf(String cpf);
+    Optional<Cliente> buscarPorCpf(String cpf);
 
 
     Iterable<Cliente> buscarTodos();
