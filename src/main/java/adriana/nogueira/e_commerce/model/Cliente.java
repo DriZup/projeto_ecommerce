@@ -11,7 +11,7 @@ public class Cliente {
     private Long id;
 
     @NotNull(message = "O campo nome não pode ser nulo!")
-    @Size(min = 3, max = 50, message = "O nome deve ter entre 3 e 50 caracteres.")
+    @NotBlank(message = "O campo nome nao pode estar em branco!")
     private String nome;
 
     @NotNull(message = "O CPF é obrigatório.")
