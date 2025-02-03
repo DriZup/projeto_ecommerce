@@ -33,4 +33,12 @@ public class GlobalExceptionHandler {
         return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Erro interno: " + ex.getMessage()));
     }
+
+    @ExceptionHandler(ProdutoEmFaltaException.class)
+    public ResponseEntity<Map<String, String>> handleProdutoEmFaltaException(ProdutoEmFaltaException ex) {
+        String mensagemErro = String.format("Produto em falta: %s", String.join(", ", ex.getProdutosEmFalta()));
+        Map<String, String> responseBody = new HashMap<>();
+        responseBody.put("erro", mensagemErro);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+    }
 }
