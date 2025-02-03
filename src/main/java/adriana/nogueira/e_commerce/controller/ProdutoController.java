@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/produtos")
 public class ProdutoController {
@@ -27,10 +29,10 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.OK).body(atualizarProduto);
     }
 
-    @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<Void> deletarProduto(@PathVariable Long id) {
-        produtoService.deletarProduto(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, String>> deletarProduto(@PathVariable Long id) {
+        Map<String, String> response = produtoService.deletarProduto(id);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping

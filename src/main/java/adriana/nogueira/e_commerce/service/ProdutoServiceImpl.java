@@ -5,6 +5,9 @@ import adriana.nogueira.e_commerce.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class ProdutoServiceImpl implements ProdutoService {
 
@@ -28,11 +31,16 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
-    public void deletarProduto(Long id) {
-        if (!produtoRepository.existsById(id)) {
-            throw new IllegalArgumentException("Produto com o ID " + id + " não encontrado!");
-        }
-        produtoRepository.deleteById(id);
+    public Map<String, String> deletarProduto(Long id) {
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado com o ID: " + id));
+
+        produtoRepository.delete(produto);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("mensagem", "Produto deletado com sucesso");
+        response.put("id", id.toString());
+        return response;
     }
 
     @Override
