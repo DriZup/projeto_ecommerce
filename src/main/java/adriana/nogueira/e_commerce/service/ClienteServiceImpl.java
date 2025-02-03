@@ -21,13 +21,21 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public void atualizarCliente(Cliente cliente) {
-        validarCliente(cliente);
-        if (!clienteRepository.existsById(cliente.getId())) {
-            throw new IllegalArgumentException("Não existe um cliente cadastrado com esse ID.");
-        }
+    public Cliente atualizarCliente(String cpf, Cliente cliente) {
+        // Buscar o cliente existente pelo CPF
+        Cliente clienteExistente = clienteRepository.findByCpf(cpf)
+                .orElseThrow(() -> new IllegalArgumentException("Não existe um cliente cadastrado com esse CPF."));
+
+        // Validar CPF e Email (se necessário)
         validarCpfEEmail(cliente);
-        clienteRepository.save(cliente);
+
+        // Atualizar os campos do cliente existente
+        clienteExistente.setNome(cliente.getNome());
+        clienteExistente.setEmail(cliente.getEmail());
+        // Atualize outros campos conforme necessário
+
+        // Salvar as alterações no banco de dados
+        return clienteRepository.save(clienteExistente);
     }
 
     @Override

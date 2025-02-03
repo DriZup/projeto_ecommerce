@@ -23,10 +23,10 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(salvarCliente);
     }
 
-    @PutMapping("/atualizar")
-    public ResponseEntity<Cliente> atualizarCliente(@Valid @RequestBody Cliente cliente) {
-        clienteService.atualizarCliente(cliente);
-        return ResponseEntity.status(HttpStatus.OK).body(cliente);
+    @PutMapping("/atualizar/{cpf}")
+    public ResponseEntity<Cliente> atualizarCliente(@PathVariable String cpf, @RequestBody Cliente cliente) {
+        Cliente clienteAtualizado = clienteService.atualizarCliente(cpf, cliente);
+        return ResponseEntity.status(HttpStatus.OK).body(clienteAtualizado);
     }
 
     @GetMapping("/buscar/{id}")

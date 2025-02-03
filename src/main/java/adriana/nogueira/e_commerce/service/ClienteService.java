@@ -8,7 +8,7 @@ public interface ClienteService {
 
     Cliente salvarCliente(Cliente cliente);
 
-    void atualizarCliente(Cliente cliente);
+    Cliente atualizarCliente(String cpf, Cliente cliente);
 
     void excluirCliente(Long id);
 
