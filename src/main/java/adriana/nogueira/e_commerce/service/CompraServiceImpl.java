@@ -3,6 +3,7 @@ package adriana.nogueira.e_commerce.service;
 import adriana.nogueira.e_commerce.dto.CompraDTO;
 import adriana.nogueira.e_commerce.dto.ProdutoDTO;
 import adriana.nogueira.e_commerce.exceptions.ClienteNaoEncontradoException;
+import adriana.nogueira.e_commerce.exceptions.ProdutoEmFaltaException;
 import adriana.nogueira.e_commerce.exceptions.ProdutoIndisponivelException;
 import adriana.nogueira.e_commerce.exceptions.ProdutoNaoEncontradoException;
 import adriana.nogueira.e_commerce.model.Cliente;
@@ -12,7 +13,9 @@ import adriana.nogueira.e_commerce.repository.ClienteRepository;
 import adriana.nogueira.e_commerce.repository.CompraRepository;
 import adriana.nogueira.e_commerce.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,26 +36,31 @@ public class CompraServiceImpl implements CompraService {
 
     @Override
     public Compra realizarCompra(CompraDTO compraDTO) {
-        // Validar CPF e buscar cliente
         Cliente cliente = clienteRepository.findByCpf(compraDTO.getCpf())
                 .orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado com o CPF: " + compraDTO.getCpf()));
 
-        // Validar lista de produtos
         List<ProdutoDTO> produtosDTO = compraDTO.getProdutos();
         if (produtosDTO == null || produtosDTO.isEmpty()) {
             throw new IllegalArgumentException("A lista de produtos não pode ser nula ou vazia.");
         }
 
-        // Buscar produtos pelo nome e validar
         List<Produto> produtos = produtosDTO.stream()
                 .map(this::buscarProdutoPorNome)
                 .collect(Collectors.toList());
 
-        // Criar e salvar a compra
+        List<String> produtosEmFalta = produtos.stream()
+                .filter(produto -> produto.getQuantidade() == 0)
+                .map(Produto::getNome)
+                .collect(Collectors.toList());
+
+        if (!produtosEmFalta.isEmpty()) {
+            throw new ProdutoEmFaltaException(produtosEmFalta);
+        }
+
+        // Criar a compra
         Compra compra = new Compra();
         compra.setCliente(cliente);
         compra.setProdutos(produtos);
-
         return compraRepository.save(compra);
     }
 
