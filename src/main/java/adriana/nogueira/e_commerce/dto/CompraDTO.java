@@ -5,7 +5,6 @@ import java.util.List;
 public class CompraDTO {
     private String cpf;
     private List<ProdutoDTO> produtos;
-    // Getters e Setters
     public String getCpf() {
         return cpf;
     }
