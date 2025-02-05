@@ -1,52 +1,39 @@
 package adriana.nogueira.e_commerce.dto;
 
+import adriana.nogueira.e_commerce.model.Produto;
+
 public class ProdutoDTO {
-    private Long id;
     private String nome;
-    private Double preco;
+    private double preco;
+    private int quantidade;
 
-    // Construtores
-    public ProdutoDTO() {
-    }
-
-    public ProdutoDTO(Long id, String nome, Double preco) {
-        this.id = id;
+    public ProdutoDTO(String nome, double preco, int quantidade) {
         this.nome = nome;
         this.preco = preco;
+        this.quantidade = quantidade;
     }
 
-    // Getters e Setters
-    public Long getId() {
-        return id;
+    public static ProdutoDTO fromModel(Produto produto) {
+        return new ProdutoDTO(produto.getNome(), produto.getPreco(), produto.getQuantidade());
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Produto toModel() {
+        Produto produto = new Produto();
+        produto.setNome(this.nome);
+        produto.setPreco(this.preco);
+        produto.setQuantidade(this.quantidade);
+        return produto;
     }
 
     public String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public Double getPreco() {
+    public double getPreco() {
         return preco;
     }
 
-    public void setPreco(Double preco) {
-        this.preco = preco;
-    }
-
-    // Método toString (opcional, para facilitar o debug)
-    @Override
-    public String toString() {
-        return "ProdutoDTO{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", preco=" + preco +
-                '}';
+    public int getQuantidade() {
+        return quantidade;
     }
 }
