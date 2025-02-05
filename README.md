@@ -11,11 +11,8 @@ Este é um sistema básico de E-Commerce desenvolvido para gerenciar o cadastro 
 ### Cadastro de Produtos
 
 - **Endpoints**:
-  - `POST /produtos/salvar`: Cadastra um novo produto.
-  - `PUT /produtos/atualizar`: Atualiza um produto existente.
-  - `DELETE /produtos/{id}`: Deleta um produto pelo ID.
-  - `GET /produtos`: Lista todos os produtos cadastrados.
-  - `GET /produtos/buscar/{nome}`: Busca produtos pelo nome.
+  - `POST /produtos`: Cadastra um novo produto.
+  - `GET /produtos`: Busca produtos.
 
 - **Validações**:
   - Nome do produto deve ser único.
@@ -27,12 +24,8 @@ Este é um sistema básico de E-Commerce desenvolvido para gerenciar o cadastro 
 ### Cadastro de Clientes
 
 - **Endpoints**:
-  - `POST /clientes/salvar`: Cadastra um novo cliente.
-  - `PUT /clientes/atualizar/{cpf}`: Atualiza os dados de um cliente pelo CPF.
-  - `DELETE /clientes/excluir/{id}`: Deleta um cliente pelo ID.
-  - `GET /clientes/buscar/{id}`: Busca um cliente pelo ID.
-  - `GET /clientes`: Lista todos os clientes cadastrados.
-  - `GET /clientes/buscar/cpf/{cpf}`: Busca um cliente pelo CPF.
+  - `POST /clientes/`: Cadastra um novo cliente.
+  - `GET /clientes/{cpf}`: Busca um cliente pelo CPF.
 
 - **Validações**:
   - CPF deve ser único e válido.
@@ -127,7 +120,7 @@ Este é um sistema básico de E-Commerce desenvolvido para gerenciar o cadastro 
 
 ### Cadastro de Produto
 
-**POST /produtos/salvar**
+**POST /produtos**
 
 Request Body:
 ```json
@@ -142,7 +135,7 @@ Request Body:
 
 ### Cadastro de Cliente
 
-**POST /clientes/salvar**
+**POST /clientes**
 
 Request Body:
 ```json
