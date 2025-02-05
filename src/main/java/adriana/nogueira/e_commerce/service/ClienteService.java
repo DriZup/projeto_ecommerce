@@ -6,16 +6,9 @@ import java.util.Optional;
 
 public interface ClienteService {
 
-    Cliente salvarCliente(Cliente cliente);
 
-    Cliente atualizarCliente(String cpf, Cliente cliente);
+        Cliente salvarCliente(Cliente cliente);
 
-    void excluirCliente(Long id);
+        Cliente findByCpf(String cpf);
 
-    Cliente buscarPorId(Long id);
-
-    Optional<Cliente> buscarPorCpf(String cpf);
-
-
-    Iterable<Cliente> buscarTodos();
 }
