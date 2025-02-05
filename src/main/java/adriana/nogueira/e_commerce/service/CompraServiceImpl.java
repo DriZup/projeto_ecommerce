@@ -36,32 +36,39 @@ public class CompraServiceImpl implements CompraService {
 
     @Override
     public Compra realizarCompra(CompraDTO compraDTO) {
-        Cliente cliente = clienteRepository.findByCpf(compraDTO.getCpf())
-                .orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado com o CPF: " + compraDTO.getCpf()));
+        try {
+            Cliente cliente = clienteRepository.findByCpf(compraDTO.getCpf());
+            List<ProdutoDTO> produtosDTO = compraDTO.getProdutos();
+            if (produtosDTO == null || produtosDTO.isEmpty()) {
+                throw new IllegalArgumentException("A lista de produtos não pode ser nula ou vazia.");
+            }
+            List<Produto> produtos = produtosDTO.stream()
+                    .map(this::buscarProdutoPorNome)
+                    .collect(Collectors.toList());
 
-        List<ProdutoDTO> produtosDTO = compraDTO.getProdutos();
-        if (produtosDTO == null || produtosDTO.isEmpty()) {
-            throw new IllegalArgumentException("A lista de produtos não pode ser nula ou vazia.");
+            List<String> produtosEmFalta = produtos.stream()
+                    .filter(produto -> produto.getQuantidade() == 0)
+                    .map(Produto::getNome)
+                    .collect(Collectors.toList());
+
+            if (!produtosEmFalta.isEmpty()) {
+                throw new ProdutoEmFaltaException(produtosEmFalta);
+            }
+
+            Compra compra = new Compra();
+            compra.setCliente(cliente);
+            compra.setProdutos(produtos);
+            return compraRepository.save(compra);
+
+        } catch (ClienteNaoEncontradoException e) {
+            throw new ClienteNaoEncontradoException(e.getMessage());
+        } catch (ProdutoEmFaltaException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto em falta: " + e.getProdutosEmFalta());
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao realizar a compra: " + e.getMessage());
         }
-
-        List<Produto> produtos = produtosDTO.stream()
-                .map(this::buscarProdutoPorNome)
-                .collect(Collectors.toList());
-
-        List<String> produtosEmFalta = produtos.stream()
-                .filter(produto -> produto.getQuantidade() == 0)
-                .map(Produto::getNome)
-                .collect(Collectors.toList());
-
-        if (!produtosEmFalta.isEmpty()) {
-            throw new ProdutoEmFaltaException(produtosEmFalta);
-        }
-
-        // Criar a compra
-        Compra compra = new Compra();
-        compra.setCliente(cliente);
-        compra.setProdutos(produtos);
-        return compraRepository.save(compra);
     }
 
     private Produto buscarProdutoPorNome(ProdutoDTO produtoDTO) {
